@@ -1,4 +1,5 @@
-poLCA_check_class <- function(.poLCA){
+poLCA_check_class <- function(.poLCA, nclass){
+  .poLCA <- filter(.poLCA, .data$model.no == nclass)
   class_prop <-
     tibble(
       estimate =
