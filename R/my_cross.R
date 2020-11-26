@@ -1,4 +1,4 @@
-my_cross <- function(.data, .x, .y){
+my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE){
   .x <- rlang::enquo(.x)
   .y <- rlang::enquo(.y)
 
@@ -64,8 +64,18 @@ my_cross <- function(.data, .x, .y){
   .crosstab_gt <-
     gt::gt(.crosstab_raw) %>%
     gt::tab_spanner(label = rlang::as_label(.y),
-                    columns = .contents_.y) %>%
-    gt::tab_source_note(stringr::str_interp("Cramer's V = $[.3f]{.cramer}   p = $[.4f]{.p.value}"))
+                    columns = .contents_.y)
+  if(cramer == TRUE & p.value == TRUE){
+    .crosstab_gt <- gt::tab_source_note(.crosstab_gt,
+                                        stringr::str_interp("Cramer's V = $[.3f]{.cramer},
+                                                            chisq.test: p = $[.4f]{.p.value}"))
+  } else if(cramer == TRUE & p.value == FALSE) {
+    .crosstab_gt <- gt::tab_source_note(.crosstab_gt,
+                                        stringr::str_interp("Cramer's V = $[.3f]{.cramer}"))
+  } else if(cramer == FALSE & p.value == TRUE) {
+    .crosstab_gt <- gt::tab_source_note(.crosstab_gt,
+                                        stringr::str_interp("chisq.test: p = $[.4f]{.p.value}"))
+  }
 
   return(.crosstab_gt)
 }
