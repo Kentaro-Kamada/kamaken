@@ -1,4 +1,4 @@
-my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALSE){
+my_cross_ <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE){
   .x <- rlang::enquo(.x)
   .y <- rlang::enquo(.y)
 
@@ -50,45 +50,11 @@ my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALS
     dplyr::as_tibble() %>%
     dplyr::mutate(dplyr::across(.cols = 1,
                                 .fns = ~{tidyr::replace_na(., replace = 'NA_')}
-    ))
-
-  if(adjres == TRUE & !is.na(.p.value)) {
-    .adjres <-
-      janitor::chisq.test(.tabyl) %>%
-      .$stdres %>%
-      tidyr::pivot_longer(cols = -1, names_to = 'name', values_to = 'adjres')
-
-    .crosstab_raw <-
-      tidyr::pivot_longer(.crosstab_raw, cols = -1, names_to = 'name', values_to = 'percent')
-
-    .crosstab_raw <-
-      dplyr::left_join(.crosstab_raw, .adjres, by = c(rlang::as_name(.x), 'name')) %>%
-      dplyr::mutate(
-        p.value =
-          abs(adjres) %>%
-          pnorm(lower.tail = FALSE) %>%
-          `*`(2),
-        percent = purrr::map_chr(percent,
-                                 ~{stringr::str_interp('$[.1f]{.*100}')}
-        )
-      ) %>%
-      dplyr::select(-adjres) %>%
-      kamaken::p_star(p.value) %>%
-      tidyr::unite(col = 'percent', percent:p.value, sep = '') %>%
-      tidyr::pivot_wider(names_from = name, values_from = percent)
-  } else {
-    .crosstab_raw <-
-      .crosstab_raw %>%
-      dplyr::mutate(
-        dplyr::across(where(is.numeric),
-                      ~{purrr::map_chr(.,
-                                       ~{stringr::str_interp('$[.1f]{.*100}')})
-                      })
-      )
-  }
-
-  .crosstab_raw <-
-    .crosstab_raw %>%
+    )) %>%
+    dplyr::mutate(dplyr::across(.cols = where(is.numeric),
+                                .fns = ~{round(.*100, digits = 1)}
+    )) %>%
+    # パーセント記号
     dplyr::mutate(dplyr::across(.cols = 1,
                                 .fns = ~{stringr::str_c(., '（％）')}
     )) %>%
@@ -113,4 +79,3 @@ my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALS
 
   return(.crosstab_gt)
 }
-
