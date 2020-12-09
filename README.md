@@ -12,9 +12,9 @@ This package could be suddenly modified at the author's convinience.
 * Pipe friendly. You can use NSE(which is adopted in `Tidyverse`).  
 * depends on `dplyr` `tidyr` `forcats` `purrr` `rlang` `stringr` `janitor` `vcd` `gt` `kamaken`.
 * augment
-  * `.data` input a data.frame  
-  * `.x` first variable which will be a row names of the table.
-  * `.y` second variable which will be a columns of the table.
-  * `cramer` if `TRUE`, calculates the value of cramer's V, `FALSE`, not. default is `TRUE`.
-  * `p.value` if `TRUE`, calculates p value of chi-squared test. default is `TRUE`.
-  * `adjres` if `TRUE`, calculates adjusted residual and shows the results of chi-square residual tests. default is `FALSE`. 
+  * `.data`: input a data.frame  
+  * `.x`: first variable which will be row names of the table.
+  * `.y`: second variable which will be columns of the table.
+  * `cramer`: if `TRUE`, calculates the value of cramer's V. default is `TRUE`.
+  * `p.value`: if `TRUE`, calculates p value of chi-squared test. default is `TRUE`.
+  * `adjres`: if `TRUE`, calculates adjusted residual and shows the results of chi-square residual tests. default is `FALSE`. 
