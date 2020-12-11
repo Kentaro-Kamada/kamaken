@@ -1,4 +1,4 @@
-my_cross_plot <- function(.data, .x, .y, .text = TRUE, .text_color = 'black'){
+my_cross_plot <- function(.data, .x, .y, .text = TRUE, .text_color = 'black', .text_size = 12){
   .x <- rlang::enquo(.x)
   .y <- rlang::enquo(.y)
 
@@ -19,7 +19,7 @@ my_cross_plot <- function(.data, .x, .y, .text = TRUE, .text_color = 'black'){
     if(.text == TRUE){
       .plot <-
         .plot+
-        ggplot2::geom_text(aes(y = n, label = percent), color = .text_color,
+        ggplot2::geom_text(aes(y = n, label = percent), color = .text_color, size = .text_size,
                            position = ggplot2::position_fill(vjust = 0.5))
     }
   .plot <-
