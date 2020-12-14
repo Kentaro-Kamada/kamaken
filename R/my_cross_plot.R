@@ -1,4 +1,5 @@
-my_cross_plot <- function(.data, .x, .y, .text = TRUE, .text_color = 'black', .text_size = 12){
+my_cross_plot <- function(.data, .x, .y, .text = TRUE, .text_color = 'black', .text_size = 12,
+                          .pvalue = FALSE){
   .x <- rlang::enquo(.x)
   .y <- rlang::enquo(.y)
 
@@ -19,7 +20,9 @@ my_cross_plot <- function(.data, .x, .y, .text = TRUE, .text_color = 'black', .t
     if(.text == TRUE){
       .plot <-
         .plot+
-        ggplot2::geom_text(aes(y = n, label = percent), color = .text_color, size = .text_size,
+        ggplot2::geom_text(aes(y = n, label = percent),
+                           color = .text_color,
+                           size = .text_size,
                            position = ggplot2::position_fill(vjust = 0.5))
     }
   .plot <-
@@ -27,7 +30,17 @@ my_cross_plot <- function(.data, .x, .y, .text = TRUE, .text_color = 'black', .t
     ggplot2::scale_y_continuous(labels = scales::percent)+
     ggplot2::coord_flip()+
     ggplot2::labs(x = rlang::as_label(.x), y = 'percentage', fill = rlang::as_label(.y))
+  if(.pvalue == TRUE){
+    .pvalue <-
+      janitor::tabyl(.data, !!.x, !!.y) %>%
+      janitor::chisq.test() %>%
+      .$p.value
+
+    .plot <-
+      .plot+
+      ggplot2::labs(caption = stringr::str_interp('chisq.test: p = $[.4f]{.pvalue}'))
+
+  }
 
   return(.plot)
 }
-
