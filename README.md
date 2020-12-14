@@ -1,7 +1,7 @@
 # kamaken
 * useful functions only for the author of this package
 
-This package is packed functions customized for the author's workflow, so it may be unuseful for a lot of users.  
+This package contains functions customized for the author's workflow, so it may be unuseful for a lot of users.  
 This package could be suddenly modified at the author's convinience.  
 
 # Functions
@@ -18,3 +18,12 @@ This package could be suddenly modified at the author's convinience.
   * `cramer`: if `TRUE`, calculates the value of cramer's V. default is `TRUE`.
   * `p.value`: if `TRUE`, calculates p value of chi-squared test. default is `TRUE`.
   * `adjres`: if `TRUE`, calculates adjusted residual and shows the results of chi-square residual tests. default is `FALSE`. 
+
+* example
+```r
+# data from ggplot2
+diamonds %>% 
+  my_cross(cut, clarity, cramer = TRUE, p.value = TRUE)
+```
+
+[my_cross]()
