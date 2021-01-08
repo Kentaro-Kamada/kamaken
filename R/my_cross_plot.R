@@ -29,7 +29,10 @@ my_cross_plot <- function(.data, .x, .y, row_percent = TRUE, text_color = 'black
     .plot+
     ggplot2::scale_y_continuous(labels = scales::percent)+
     ggplot2::coord_flip()+
-    ggplot2::labs(x = rlang::as_label(.x), y = 'percentage', fill = rlang::as_label(.y))
+    ggplot2::labs(x = rlang::as_label(.x), y = 'percentage', fill = rlang::as_label(.y))+
+    ggplot2::theme_minimal()+
+    ggplot2::theme(legend.position = 'bottom')+
+    ggplot2::guides(fill = ggplot2::guide_legend(reverse = TRUE))
   if(p.value == TRUE){
     .p.value <-
       janitor::tabyl(.data, !!.x, !!.y) %>%
@@ -44,3 +47,5 @@ my_cross_plot <- function(.data, .x, .y, row_percent = TRUE, text_color = 'black
 
   return(.plot)
 }
+
+
