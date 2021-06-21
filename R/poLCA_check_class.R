@@ -1,24 +1,24 @@
-poLCA_check_class <- function(.poLCA, nclass){
-  .poLCA <- filter(.poLCA, .data$model.no == nclass)
+poLCA_check_class <- function(.poLCA_result_table, nclass){
+  .poLCA <- dplyr::filter(.poLCA_result_table, .data$model.no == nclass)
   class_prop <-
-    tibble(
+    dplyr::tibble(
       estimate =
         dplyr::pull(.poLCA, .data$model) %>%
-        flatten() %>% .$P
+        purrr::flatten() %>% .$P
     ) %>%
-    transmute(
+    dplyr::transmute(
       variable = 'クラス構成割合',
-      class = row_number(),
+      class = dplyr::row_number(),
       outcome = NA_real_,
       estimate
     )
 
   lca_output <-
-    unnest(.poLCA, .data$tidy) %>%
-    select(variable:estimate) %>%
-    bind_rows(class_prop, .) %>%
-    mutate(estimate = round(estimate, 3)) %>%
-    pivot_wider(names_from = class, values_from = estimate)
+    tidyr::unnest(.poLCA, .data$tidy) %>%
+    dplyr::select(variable:estimate) %>%
+    dplyr::bind_rows(class_prop, .) %>%
+    dplyr::mutate(estimate = round(estimate, 3)) %>%
+    tidyr::pivot_wider(names_from = class, values_from = estimate)
 
   return(lca_output)
 
