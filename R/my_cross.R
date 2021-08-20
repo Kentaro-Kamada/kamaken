@@ -1,3 +1,18 @@
+# Cross tabulations for categorical variables
+#'
+#' Generate a contingency table.
+#'
+#' @param .data input a tibble or data.frame
+#' @param .x first variable which will be row names of the table
+#' @param .y second variable which will be columns of the table
+#' @param cramer if `TRUE`, calculates the value of cramer's V. default is `TRUE`
+#' @param p.value if `TRUE`, calculates p value of chi-squared test. default is `TRUE`
+#' @param adjres if `TRUE`, calculates adjusted residual and shows the results of chi-square residual tests. default is `FALSE`
+#'
+#' @importFrom magrittr %>%
+#'
+#' @export
+#'
 my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALSE){
   .x <- rlang::enquo(.x)
   .y <- rlang::enquo(.y)
@@ -113,4 +128,3 @@ my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALS
 
   return(.crosstab_gt)
 }
-
