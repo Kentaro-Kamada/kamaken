@@ -25,6 +25,8 @@ my_cross_plot(
 
 \item{text_color}{color of percent text}
 
+\item{text_size}{size of text}
+
 \item{p.value}{if `TRUE`, calculates p value of chi-squared test. default is `TRUE`}
 }
 \description{

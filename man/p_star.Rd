@@ -6,6 +6,9 @@
 \usage{
 p_star(.data, .var)
 }
+\arguments{
+\item{.data}{neko}
+}
 \description{
 convert p value to stars in a tibble.
 }

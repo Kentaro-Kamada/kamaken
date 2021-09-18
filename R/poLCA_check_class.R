@@ -1,3 +1,11 @@
+# format a result of latent class analysis
+#'
+#' format a result of latent class analysis
+#'
+#' @export
+#'
+
+
 poLCA_check_class <- function(.poLCA_result_table, nclass){
   .poLCA <- dplyr::filter(.poLCA_result_table, .data$model.no == nclass)
   class_prop <-

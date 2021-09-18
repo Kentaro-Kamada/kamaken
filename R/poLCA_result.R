@@ -1,3 +1,11 @@
+# useful short cut for `poLCA::poLCA`
+#'
+#' useful short cut for `poLCA::poLCA`. you get a result table for reporting with the other functions like `poLCA_check_class` or `poLCA_BLRT`.
+#'
+#'
+#' @export
+#'
+
 poLCA_result <- function(formula, data, nclass, maxiter = 5000, nrep = 1,
                          reorder_with = 'class prop', reorder_outcome = 1,
                          reorder_decreasing = TRUE) {

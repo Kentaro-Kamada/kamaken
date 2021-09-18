@@ -7,7 +7,7 @@
 #' @param .y second variable which will be columns of the table
 #' @param row_percent if `TRUE`, shows row percent with text, default is `TRUE`
 #' @param text_color color of percent text
-#' @param text_size
+#' @param text_size size of text
 #' @param p.value if `TRUE`, calculates p value of chi-squared test. default is `TRUE`
 #'
 #' @importFrom magrittr %>%

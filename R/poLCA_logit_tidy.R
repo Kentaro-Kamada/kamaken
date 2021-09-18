@@ -1,3 +1,10 @@
+# inu
+#'
+#'
+#' @export
+#'
+
+
 poLCA_logit_tidy <- function(.poLCA_result_table) {
   dplyr::inner_join(
     .poLCA_result_table %>%
