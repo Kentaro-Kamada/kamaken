@@ -32,7 +32,8 @@
 #' @export
 #'
 
-poLCA_BLRT <- function(.poLCA_result_table, boot_size = F, maxiter = 6000, nrep = 3) {
+poLCA_BLRT <- function(.poLCA_result_table, boot_size = F, maxiter = 6000, nrep = 3,
+                       seed = 123, workers = future::availableCores()) {
   if(!boot_size) {
     .poLCA_result_table %>%
       select(model.no, model, glance) %>%
@@ -61,7 +62,7 @@ poLCA_BLRT <- function(.poLCA_result_table, boot_size = F, maxiter = 6000, nrep 
     select(!(model:g.squared))
 
   # 並列化の準備
-  future::plan(strategy = future::multisession)
+  future::plan(strategy = future::multisession(workers = workers))
 
   # パラメトリックブートストラップ
   result <-
@@ -76,10 +77,10 @@ poLCA_BLRT <- function(.poLCA_result_table, boot_size = F, maxiter = 6000, nrep 
              })) %>%
     mutate(
       bootstrap =
-        future_map(bootstrap, .options = furrr_options(seed = TRUE),
+        future_map(bootstrap, .options = furrr_options(seed = seed),
                    ~{mutate(.,
                             dat = future_pmap(list(N2, probs2, P2),
-                                              .options = furrr_options(seed = TRUE),
+                                              .options = furrr_options(seed = seed),
                                               ~{poLCA.simdata(N = ..1, probs = ..2,
                                                               P = ..3) %>% .$dat})
                    ) %>% select(id, dat)}
@@ -88,19 +89,19 @@ poLCA_BLRT <- function(.poLCA_result_table, boot_size = F, maxiter = 6000, nrep 
     # ブートストラップサンプルに対して，クラス数kとクラス数k + 1の潜在クラス分析を実行
     mutate(
       bootstrap =
-        future_map2(model.no, bootstrap, .options = furrr_options(seed = TRUE),
+        future_map2(model.no, bootstrap, .options = furrr_options(seed = seed),
              ~{mutate(.y,
                       model.no2 = .x,
                       deviance_null =
                         future_map2_dbl(dat, model.no2,
-                                        .options = furrr_options(seed = TRUE),
+                                        .options = furrr_options(seed = seed),
                                         ~{poLCA(formula = as.matrix(.x) ~ 1, data = .x,
                                                 nclass = .y - 1, maxiter = maxiter,
                                                 nrep = nrep,
                                                 verbose = F) %>% .$Gsq}),
                       deviance_alt =
                         future_map2_dbl(dat, model.no2,
-                                        .options = furrr_options(seed = TRUE),
+                                        .options = furrr_options(seed = seed),
                                         ~{poLCA(formula = as.matrix(.x) ~ 1, data = .x,
                                                 nclass = .y, maxiter = maxiter,
                                                 nrep = nrep,
@@ -111,7 +112,7 @@ poLCA_BLRT <- function(.poLCA_result_table, boot_size = F, maxiter = 6000, nrep 
     # p値の算出
     unnest(bootstrap) %>%
     group_by(モデル対比) %>%
-    summarise(p.value = sum(delta_deviance < delta_deviance_boot)/boot_size)
+    summarise(p.value = (sum(delta_deviance <= delta_deviance_boot) + 1)/(boot_size + 1))
 
   future::plan(strategy = future::sequential)
 
