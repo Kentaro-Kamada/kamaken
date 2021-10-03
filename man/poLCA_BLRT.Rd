@@ -4,7 +4,14 @@
 \alias{poLCA_BLRT}
 \title{Bootstrap Likelihood Ratio Test with `poLCA`}
 \usage{
-poLCA_BLRT(.poLCA_result_table, boot_size = F, maxiter = 6000, nrep = 3)
+poLCA_BLRT(
+  .poLCA_result_table,
+  boot_size = F,
+  maxiter = 6000,
+  nrep = 3,
+  seed = 123,
+  workers = future::availableCores()
+)
 }
 \description{
 Bootstrap Likelihood Ratio Test with `poLCA`
