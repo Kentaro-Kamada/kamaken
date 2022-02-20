@@ -1,3 +1,15 @@
+# Discriptive statistics for categorical variables
+#'
+#' Show Discriptive statistics for categorical variables. The output is formatted with `gt` so that you can easily include it in Rmarkdown documents.
+#'
+#' @param .data input a tibble or data.frame
+#' @param ... categorical variables
+#'
+#' @importFrom magrittr %>%
+#'
+#' @export
+#'
+
 describe_d_ <- function(.data, ...){
   .data <- dplyr::select(.data, ...)
   tab <-

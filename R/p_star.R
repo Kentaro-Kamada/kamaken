@@ -1,3 +1,11 @@
+# Convert p.value to stars
+#'
+#' convert p value to stars in a tibble.
+#'
+#' @param .data neko
+#'
+#' @export
+#'
 p_star <- function(.data, .var){
   .var <- rlang::enquo(.var)
   .var_name <- rlang::as_label(.var)

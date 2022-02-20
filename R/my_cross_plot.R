@@ -1,3 +1,19 @@
+# Cross tabulations for categorical variables
+#'
+#' Generate a plot converted from a contingency table.
+#'
+#' @param .data input a tibble or data.frame
+#' @param .x first variable which will be row names of the table
+#' @param .y second variable which will be columns of the table
+#' @param row_percent if `TRUE`, shows row percent with text, default is `TRUE`
+#' @param text_color color of percent text
+#' @param text_size size of text
+#' @param p.value if `TRUE`, calculates p value of chi-squared test. default is `TRUE`
+#'
+#' @importFrom magrittr %>%
+#'
+#' @export
+#'
 my_cross_plot <- function(.data, .x, .y, row_percent = TRUE, text_color = 'black', text_size = 4,
                           p.value = FALSE){
   .x <- rlang::enquo(.x)
