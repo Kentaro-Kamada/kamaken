@@ -62,7 +62,8 @@ poLCA_BLRT <- function(.poLCA_result_table, boot_size = F, maxiter = 6000, nrep 
     select(!(model:g.squared))
 
   # 並列化の準備
-  future::plan(strategy = future::multisession(workers = workers))
+  # future::plan(strategy = future::multisession(workers = workers))
+  future::plan(strategy = 'multisession')
 
   # パラメトリックブートストラップ
   result <-
@@ -114,10 +115,11 @@ poLCA_BLRT <- function(.poLCA_result_table, boot_size = F, maxiter = 6000, nrep 
     group_by(モデル対比) %>%
     summarise(p.value = (sum(delta_deviance <= delta_deviance_boot) + 1)/(boot_size + 1))
 
-  future::plan(strategy = future::sequential)
+  # future::plan(strategy = future::sequential)
+  future::plan(strategy = 'sequential')
 
   left_join(base_table, result, by = 'モデル対比')
   }
 }
 
-# carcinoma, nclass = 2:4, boot_size = 1000で12分
+# carcinoma, nclass = 2:5, boot_size = 1000で11分（M1 Mac）
