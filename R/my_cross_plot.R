@@ -32,7 +32,7 @@ my_cross_plot <- function(.data, .x, .y, row_percent = TRUE, text_color = 'black
                     ggplot2::aes(forcats::fct_rev(factor(!!.x)), proportion,
                                  fill = forcats::fct_rev(factor(!!.y)))
     )+
-    ggplot2::geom_bar(position = 'fill', stat = 'identity', width = 0.6)
+    ggplot2::geom_bar(position = 'fill', stat = 'identity', width = 0.6, color = 'black')
     if(row_percent == TRUE){
       .plot <-
         .plot+
