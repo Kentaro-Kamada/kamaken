@@ -13,11 +13,11 @@ my_cross(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALSE)
 
 \item{.y}{second variable which will be columns of the table}
 
-\item{cramer}{if `TRUE`, calculates the value of cramer's V. default is `TRUE`}
+\item{cramer}{if \code{TRUE}, calculates the value of cramer's V. default is \code{TRUE}}
 
-\item{p.value}{if `TRUE`, calculates p value of chi-squared test. default is `TRUE`}
+\item{p.value}{if \code{TRUE}, calculates p value of chi-squared test. default is \code{TRUE}}
 
-\item{adjres}{if `TRUE`, calculates adjusted residual and shows the results of chi-square residual tests. default is `FALSE`}
+\item{adjres}{if \code{TRUE}, calculates adjusted residual and shows the results of chi-square residual tests. default is \code{FALSE}}
 }
 \description{
 Generate a contingency table.

@@ -21,13 +21,13 @@ my_cross_plot(
 
 \item{.y}{second variable which will be columns of the table}
 
-\item{row_percent}{if `TRUE`, shows row percent with text, default is `TRUE`}
+\item{row_percent}{if \code{TRUE}, shows row percent with text, default is \code{TRUE}}
 
 \item{text_color}{color of percent text}
 
 \item{text_size}{size of text}
 
-\item{p.value}{if `TRUE`, calculates p value of chi-squared test. default is `TRUE`}
+\item{p.value}{if \code{TRUE}, calculates p value of chi-squared test. default is \code{TRUE}}
 }
 \description{
 Generate a plot converted from a contingency table.
