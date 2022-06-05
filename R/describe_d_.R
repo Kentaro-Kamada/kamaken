@@ -6,32 +6,48 @@
 #' @param ... categorical variables
 #'
 #' @importFrom magrittr %>%
+#' @importFrom dplyr select
+#' @importFrom dplyr as_tibble
+#' @importFrom dplyr transmute
+#' @importFrom dplyr mutate
+#' @importFrom purrr map2_dfr
+#' @importFrom purrr map_chr
+#' @importFrom janitor tabyl
+#' @importFrom stringr str_interp
+#' @importFrom gt gt
+#' @importFrom gt cols_align
+#' @importFrom gt tab_style
+#' @importFrom gt tab_options
+#' @importFrom gt cell_text
+#' @importFrom gt cells_body
+#' @importFrom gt cells_row_groups
+#' @importFrom gt pct
 #'
 #' @export
 #'
 
 describe_d_ <- function(.data, ...){
-  .data <- dplyr::select(.data, ...)
+  .data <- select(.data, ...)
   tab <-
-    purrr::map2_dfr(.x = .data, .y = names(.data),
-                    ~{janitor::tabyl(.x) %>%
-                        dplyr::as_tibble() %>%
-                        dplyr::transmute(group = .y,
-                                         variables = as.character(.x),
-                                         n, percent)
-                    }) %>%
-    dplyr::mutate(percent = purrr::map_chr(percent, ~{stringr::str_interp('$[.1f]{.*100}%')}))
+    map2_dfr(.x = .data, .y = names(.data),
+             ~{tabyl(.x) %>%
+                 as_tibble() %>%
+                 transmute(group = .y,
+                           variables = as.character(.x),
+                           n, percent)
+             }) %>%
+    mutate(percent = map_chr(percent, ~{str_interp('$[.1f]{.*100}%')}))
 
   gt_obj <-
-    gt::gt(tab, groupname_col = 'group') %>%
-    gt::cols_align(align = 'right', columns = c(n, percent)) %>%
-    gt::tab_style(style = gt::cell_text(weight = 'bold'),
-                  locations = gt::cells_row_groups()
-                  ) %>%
-    gt::tab_style(style = gt::cell_text(indent = gt::pct(5)),
-                  locations = gt::cells_body(columns = variables)
-                  ) %>%
-    gt::tab_options(table.width = gt::pct(50))
+    gt(tab, groupname_col = 'group') %>%
+    cols_align(align = 'right', columns = c(n, percent)) %>%
+    tab_style(style = cell_text(weight = 'bold'),
+              locations = cells_row_groups()
+    ) %>%
+    tab_style(style = cell_text(indent = pct(5)),
+              locations = cells_body(columns = variables)
+    ) %>%
+    tab_options(table.width = pct(50))
 
   return(gt_obj)
 }

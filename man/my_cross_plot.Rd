@@ -8,6 +8,7 @@ my_cross_plot(
   .data,
   .x,
   .y,
+  strata = NULL,
   row_percent = TRUE,
   text_color = "black",
   text_size = 4,
