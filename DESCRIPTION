@@ -12,13 +12,15 @@ Suggests:
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Imports:
     broom,
     cli,
     dplyr,
     furrr,
     glue,
+    gt,
+    janitor,
     lifecycle,
     magrittr,
     poLCA,
@@ -27,5 +29,6 @@ Imports:
     rlang,
     stringr,
     tidyr,
+    vcd,
     withr
 Roxygen: list(markdown = TRUE)
