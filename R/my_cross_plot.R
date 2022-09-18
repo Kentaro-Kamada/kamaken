@@ -49,7 +49,6 @@ my_cross_plot <- function(.data, .x, .y, strata = NULL,
     ggplot2::coord_flip()+
     ggplot2::facet_grid(rows = vars(!!strata))+
     ggplot2::labs(x = rlang::as_label(.x), y = 'percentage', fill = rlang::as_label(.y))+
-    ggplot2::theme_minimal()+
     ggplot2::theme(legend.position = 'bottom')+
     ggplot2::guides(fill = ggplot2::guide_legend(reverse = TRUE))
   if(p.value == TRUE){
