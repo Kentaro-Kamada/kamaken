@@ -1,7 +1,7 @@
 Type: Package
 Package: kamaken
 Title: useful toolbox for sociologists
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person("Kentaro", "Kamada", , "kamaken0705@g.ecc.u-tokyo.ac.jp", role = c("aut", "cre"))
 Description: More about what it does (maybe more than one line) Use four
