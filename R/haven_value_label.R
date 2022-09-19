@@ -16,7 +16,7 @@
 
 
 haven_value_label <- function(data) {
-  if(!(class(data) %in% c('data.frame', 'tbl_df'))) stop('`data` must be `data.frame` or `tibble`')
+  if(!(any(class(data) %in% c('data.frame', 'tbl_df')))) stop('`data` must be `data.frame` or `tibble`')
   else {
     tibble(
       変数 = names(select(data, where(is.labelled))),
