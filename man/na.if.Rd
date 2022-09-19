@@ -2,15 +2,15 @@
 % Please edit documentation in R/na.if.R
 \name{na.if}
 \alias{na.if}
-\title{This is a wrapper function of `dplyr::na_if`. This function allows us input a numeric vector to `y`, while `dplyr::na_if` only recieves a scalar.}
+\title{This is a wrapper function of \code{dplyr::na_if}. This function allows us input a numeric vector to \code{y}, while \code{dplyr::na_if} only recieves a scalar.}
 \usage{
 na.if(x, y)
 }
 \arguments{
 \item{x}{a variable vector}
 
-\item{y}{a numeric vector which contains values you want to convert to `NA`}
+\item{y}{a numeric vector which contains values you want to convert to \code{NA}}
 }
 \description{
-This is a wrapper function of `dplyr::na_if`. This function allows us input a numeric vector to `y`, while `dplyr::na_if` only recieves a scalar.
+This is a wrapper function of \code{dplyr::na_if}. This function allows us input a numeric vector to \code{y}, while \code{dplyr::na_if} only recieves a scalar.
 }

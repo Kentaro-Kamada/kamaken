@@ -2,7 +2,7 @@
 % Please edit documentation in R/describe_d_.R
 \name{describe_d_}
 \alias{describe_d_}
-\title{Show Discriptive statistics for categorical variables. The output is formatted with `gt` so that you can easily include it in Rmarkdown documents.}
+\title{Show Discriptive statistics for categorical variables. The output is formatted with \code{gt} so that you can easily include it in Rmarkdown documents.}
 \usage{
 describe_d_(.data, ...)
 }
@@ -12,5 +12,5 @@ describe_d_(.data, ...)
 \item{...}{categorical variables}
 }
 \description{
-Show Discriptive statistics for categorical variables. The output is formatted with `gt` so that you can easily include it in Rmarkdown documents.
+Show Discriptive statistics for categorical variables. The output is formatted with \code{gt} so that you can easily include it in Rmarkdown documents.
 }

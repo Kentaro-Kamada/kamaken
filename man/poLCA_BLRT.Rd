@@ -2,7 +2,7 @@
 % Please edit documentation in R/poLCA_BLRT.R
 \name{poLCA_BLRT}
 \alias{poLCA_BLRT}
-\title{Bootstrap Likelihood Ratio Test with `poLCA`}
+\title{Bootstrap Likelihood Ratio Test with \code{poLCA}}
 \usage{
 poLCA_BLRT(
   .poLCA_result_table,
@@ -14,5 +14,5 @@ poLCA_BLRT(
 )
 }
 \description{
-Bootstrap Likelihood Ratio Test with `poLCA`
+Bootstrap Likelihood Ratio Test with \code{poLCA}
 }
