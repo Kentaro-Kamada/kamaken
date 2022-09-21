@@ -1,6 +1,6 @@
 # use LEM (Vermunt 1997) thourgh R
 #'
-#' Activate LEM through `system()`. you need to use Windows and set the system PATH.
+#' Activate LEM through `system()`.
 #'
 #' @importFrom purrr walk
 #' @importFrom purrr map_chr
@@ -54,10 +54,14 @@ lem <- function(lat = '',
   inp_path <- list.files(str_c(path, 'inp'), full.names = T)
   out_path <- str_replace_all(inp_path, 'inp', 'out')
 
+  # OS判別
+  if(.Platform$OS.type == 'windows') command <- 'lem95'
+  if(.Platform$OS.type == 'unix') command <- 'wine lem95'
+
   # lem実行
-  walk(str_c('lem95', inp_path, out_path, sep = ' '),
+  walk(str_c(command, inp_path, out_path, sep = ' '),
        ~{system(., wait = F)
-         Sys.sleep(0.4)})
+         Sys.sleep(0.8)})
 
   # 最大対数尤度の読み出し
   max_loglik <-
