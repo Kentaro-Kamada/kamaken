@@ -2,7 +2,7 @@
 % Please edit documentation in R/lem.R
 \name{lem}
 \alias{lem}
-\title{Activate LEM through \code{system()}. you need to use Windows and set the system PATH.}
+\title{Activate LEM through \code{system2()}.}
 \usage{
 lem(
   lat = "",
@@ -22,5 +22,5 @@ lem(
 )
 }
 \description{
-Activate LEM through \code{system()}. you need to use Windows and set the system PATH.
+Activate LEM through \code{system2()}.
 }
