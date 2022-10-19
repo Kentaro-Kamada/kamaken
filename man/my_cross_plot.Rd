@@ -10,7 +10,6 @@ my_cross_plot(
   .y,
   strata = NULL,
   row_percent = TRUE,
-  text_color = "black",
   text_size = 4,
   p.value = FALSE
 )
@@ -23,8 +22,6 @@ my_cross_plot(
 \item{.y}{second variable which will be columns of the table}
 
 \item{row_percent}{if \code{TRUE}, shows row percent with text, default is \code{TRUE}}
-
-\item{text_color}{color of percent text}
 
 \item{text_size}{size of text}
 

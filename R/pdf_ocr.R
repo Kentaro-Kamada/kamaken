@@ -2,10 +2,22 @@
 #'
 #' This function needs some outside modules tesseract, poppler and qpdf. These can be installed from homebrew.
 #'
+#' @importFrom magrittr %>%
+#' @importFrom stringr str_remove
+#' @importFrom stringr str_c
+#' @importFrom stringr str_replace
+#' @importFrom purrr walk2
+#' @importFrom pdftools pdf_info
+#' @importFrom pdftools pdf_convert
+#' @importFrom pdftools pdf_combine
+#'
+#'
 #' @export
 #'
 
-pdf_ocr <- function(path, lang = 'eng', dpi = 150) {
+pdf_ocr <- function(path, lang = c('eng', 'jpn', 'jpn_vert'), dpi = 150) {
+
+  lang <- match.arg(lang)
 
   dirpath <- dirname(path)
   filename <- str_remove(path, str_c('^', dirpath))
