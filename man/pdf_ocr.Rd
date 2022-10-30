@@ -4,7 +4,7 @@
 \alias{pdf_ocr}
 \title{This function needs some outside modules tesseract, poppler and qpdf. These can be installed from homebrew.}
 \usage{
-pdf_ocr(path, lang = c("eng", "jpn", "jpn_vert"), dpi = 150)
+pdf_ocr(path, lang = c("eng", "jpn", "jpn_vert"), dpi = 150, psm = 6)
 }
 \description{
 This function needs some outside modules tesseract, poppler and qpdf. These can be installed from homebrew.

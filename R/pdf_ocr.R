@@ -15,12 +15,12 @@
 #' @export
 #'
 
-pdf_ocr <- function(path, lang = c('eng', 'jpn', 'jpn_vert'), dpi = 150) {
+pdf_ocr <- function(path, lang = c('eng', 'jpn', 'jpn_vert'), dpi = 150, psm = 6) {
 
   lang <- match.arg(lang)
 
   dirpath <- dirname(path)
-  filename <- str_remove(path, str_c('^', dirpath))
+  filename <- basename(path)
 
   # pdfのページ数を調べる
   page <- pdftools::pdf_info(path)$pages
@@ -29,7 +29,7 @@ pdf_ocr <- function(path, lang = c('eng', 'jpn', 'jpn_vert'), dpi = 150) {
   if(!dir.exists(str_c(dirpath, '/pdf'))) dir.create(str_c(dirpath, '/pdf'))
 
   pngpath <-
-    str_c(dirpath, '/png',
+    str_c(dirpath, '/png/',
           filename %>% str_remove('\\.pdf$'),
           1:page, '.png')
 
@@ -42,11 +42,13 @@ pdf_ocr <- function(path, lang = c('eng', 'jpn', 'jpn_vert'), dpi = 150) {
 
   # ocr
   walk2(pngpath, pdfpath,
-        ~{system2('tesseract', args = str_c('"', .x, '" "', .y, '" -l ', lang, ' pdf'))}
+        ~{system2('tesseract',
+                  args = str_c('"', .x, '" "', .y, '" -l ', lang, ' --psm ', psm, ' pdf'))}
   )
 
   # combine pdf
   pdftools::pdf_combine(input = str_c(pdfpath, '.pdf'), output = str_replace(path, '\\.pdf$', '_out\\.pdf'))
 
 }
+
 
