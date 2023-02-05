@@ -14,7 +14,7 @@ poLCA_result(
   reorder_with = "class prop",
   reorder_outcome = 1,
   reorder_decreasing = TRUE,
-  ...
+  verbose = TRUE
 )
 }
 \description{

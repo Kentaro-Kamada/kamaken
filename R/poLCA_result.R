@@ -18,7 +18,7 @@
 
 poLCA_result <- function(formula, data, nclass, maxiter = 5000, nrep = 1,
                          reorder_with = 'class prop', reorder_outcome = 1,
-                         reorder_decreasing = TRUE, ...) {
+                         reorder_decreasing = TRUE, verbose = TRUE) {
 
   if(reorder_with == 'class prop') {
     .result_table <-
@@ -53,7 +53,8 @@ poLCA_result <- function(formula, data, nclass, maxiter = 5000, nrep = 1,
                 pluck(., 'probs', reorder_with) %>%
                 .[,reorder_outcome] %>%
                 as.numeric() %>%
-                order(decreasing = reorder_decreasing))
+                order(decreasing = reorder_decreasing)
+              )
             })
       )
 
@@ -67,7 +68,7 @@ poLCA_result <- function(formula, data, nclass, maxiter = 5000, nrep = 1,
           model.no, probs_start, ~{
             poLCA(formula = formula,
                   data = data, maxiter = maxiter, nrep = 1,
-                  nclass = .x, probs.start = .y, ...)
+                  nclass = .x, probs.start = .y, verbose = verbose)
           }),
       tidy = map(model, broom::tidy),
       glance = map(model, broom::glance),
@@ -77,3 +78,4 @@ poLCA_result <- function(formula, data, nclass, maxiter = 5000, nrep = 1,
   return(.result_table)
 
 }
+
