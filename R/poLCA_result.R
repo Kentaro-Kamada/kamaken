@@ -25,7 +25,7 @@ poLCA_result <- function(formula, data, nclass, maxiter = 5000, nrep = 1,
       tibble(
         model.no = nclass,
         model =
-          map(model.no, ~{
+          map(model.no, .progress = T, ~{
             poLCA(formula = formula, data = data,
                   maxiter = maxiter, nrep = nrep, nclass = ., verbose = FALSE)
           }),
@@ -41,7 +41,7 @@ poLCA_result <- function(formula, data, nclass, maxiter = 5000, nrep = 1,
       tibble(
         model.no = nclass,
         model =
-          map(model.no, ~{
+          map(model.no, .progress = T, ~{
             poLCA(formula = formula, data = data,
                   maxiter = maxiter, nrep = nrep, nclass = ., verbose = FALSE)
             }),
