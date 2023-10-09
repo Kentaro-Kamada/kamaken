@@ -50,13 +50,13 @@ my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALS
   .contents_.y <- pull(.data, !!.y)
   if(any(class(.contents_.y) == 'factor')){
     .contents_.y <-
-      fct_na_value_to_level(.contents_.y, na_level = 'NA_') %>%
+      fct_na_value_to_level(.contents_.y, level = 'NA_') %>%
       fct_unique() %>%
       as.character()
   } else {
     .contents_.y <-
       factor(.contents_.y) %>%
-      fct_na_value_to_level(na_level = 'NA_') %>%
+      fct_na_value_to_level(level = 'NA_') %>%
       fct_unique() %>%
       as.character()
   }
