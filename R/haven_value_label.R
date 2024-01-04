@@ -21,9 +21,10 @@ haven_value_label <- function(data) {
     tibble(
       変数 = names(select(data, where(is.labelled))),
       値 = map(select(data, where(is.labelled)),
-              ~pluck(., attr_getter('labels'))),
+              \(x) pluck(x, attr_getter('labels'))),
       ラベル = map(値, names)
     ) %>%
+      mutate(値 = map(値, as.character)) %>%
       unnest(cols = c(値, ラベル))
   }
 }

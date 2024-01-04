@@ -2,7 +2,8 @@
 % Please edit documentation in R/poLCA_result.R
 \name{poLCA_result}
 \alias{poLCA_result}
-\title{useful short cut for \code{poLCA::poLCA}. you get a result table for reporting with the other functions like \code{poLCA_check_class} or \code{poLCA_BLRT}.}
+\title{Useful short cut for \code{poLCA::poLCA}.
+you get a result table for reporting with the other functions like \code{poLCA_check_class} or \code{poLCA_BLRT}.}
 \usage{
 poLCA_result(
   formula,
@@ -12,9 +13,11 @@ poLCA_result(
   nrep = 1,
   reorder_with = "class prop",
   reorder_outcome = 1,
-  reorder_decreasing = TRUE
+  reorder_decreasing = TRUE,
+  verbose = TRUE
 )
 }
 \description{
-useful short cut for \code{poLCA::poLCA}. you get a result table for reporting with the other functions like \code{poLCA_check_class} or \code{poLCA_BLRT}.
+Useful short cut for \code{poLCA::poLCA}.
+you get a result table for reporting with the other functions like \code{poLCA_check_class} or \code{poLCA_BLRT}.
 }
