@@ -2,7 +2,7 @@
 % Please edit documentation in R/rdunif.R
 \name{rdunif}
 \alias{rdunif}
-\title{This function was in purrr before version 0.3.5 but deprecated in purrr 1.0.0 because it's not related to the core purpose of purrr.}
+\title{Generate random sample from a discrete uniform distribution}
 \usage{
 rdunif(n, b, a = 1)
 }

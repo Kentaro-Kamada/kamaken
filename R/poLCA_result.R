@@ -1,17 +1,35 @@
-#'
 #' Useful short cut for `poLCA::poLCA`.
+#'
 #' you get a result table for reporting with the other functions like `poLCA_check_class` or `poLCA_BLRT`.
 #'
-#' @importFrom dplyr tibble
-#' @importFrom dplyr mutate
-#' @importFrom purrr map
-#' @importFrom purrr map2
-#' @importFrom purrr pluck
-#' @importFrom poLCA poLCA
-#' @importFrom poLCA poLCA.reorder
-#' @importFrom broom tidy
-#' @importFrom broom glance
-#' @importFrom broom augment
+#' @param formula a formula object directly passed to `poLCA::poLCA`.
+#' @param data a data frame.
+#' @param nclass a numeric vector of number of latent class to estimate. For example, if you want to estimate 2 class model to 5 class model for comparing model fitting of them, input `nclass = 2:5`.
+#' @param maxiter The maximum number of iterations through which the estimation algorithm will cycle.
+#' @param nrep Number of times to estimate the model, using different values of probs.start. The default is one. Setting nrep>1 automates the search for the global—rather than just a local—maximum of the log-likelihood function. poLCA returns the parameter estimates corresponding to the model with the greatest log-likelihood.
+#' @param reorder_with 'class_prop' or one variable name. If 'class_prop', the order of latent class is determined by the proportion of each class. If one variable name, the order of latent class is determined by the conditional probability of the variable. The default is 'class_prop'.
+#' @param reorder_outcome a numeric value of a category of manifest variable. You can reorder latent classes with reference to the category of manifest variable. You must specify a manifest variable in `reorder_with` argment. The default is 1.
+#'
+#' @seealso [poLCA::poLCA()]
+#'
+#' @examples
+#' # example data
+#' data('carcinoma', package = 'poLCA')
+#'
+#' # estimate 2 class model to 3 class model
+#' result <- poLCA_result(
+#'   formula = as.matrix(carcinoma) ~ 1,
+#'   data = carcinoma,
+#'   nclass = 2:3,
+#'   maxiter = 6000,
+#'   nrep = 1,
+#'   verbose = TRUE
+#' )
+#'
+#' @importFrom dplyr tibble mutate
+#' @importFrom purrr map map2 pluck
+#' @importFrom poLCA poLCA poLCA.reorder
+#' @importFrom broom tidy glance augment
 #'
 #' @export
 #'
@@ -75,6 +93,7 @@ poLCA_result <- function(formula, data, nclass, maxiter = 5000, nrep = 1,
       augment = map(model, broom::augment)
     )
 
+  class(.result_table) <- c('poLCA_result', class(.result_table))
   return(.result_table)
 
 }

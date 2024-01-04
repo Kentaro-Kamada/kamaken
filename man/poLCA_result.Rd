@@ -2,8 +2,7 @@
 % Please edit documentation in R/poLCA_result.R
 \name{poLCA_result}
 \alias{poLCA_result}
-\title{Useful short cut for \code{poLCA::poLCA}.
-you get a result table for reporting with the other functions like \code{poLCA_check_class} or \code{poLCA_BLRT}.}
+\title{Useful short cut for \code{poLCA::poLCA}.}
 \usage{
 poLCA_result(
   formula,
@@ -17,7 +16,39 @@ poLCA_result(
   verbose = TRUE
 )
 }
+\arguments{
+\item{formula}{a formula object directly passed to \code{poLCA::poLCA}.}
+
+\item{data}{a data frame.}
+
+\item{nclass}{a numeric vector of number of latent class to estimate. For example, if you want to estimate 2 class model to 5 class model for comparing model fitting of them, input \code{nclass = 2:5}.}
+
+\item{maxiter}{The maximum number of iterations through which the estimation algorithm will cycle.}
+
+\item{nrep}{Number of times to estimate the model, using different values of probs.start. The default is one. Setting nrep>1 automates the search for the global—rather than just a local—maximum of the log-likelihood function. poLCA returns the parameter estimates corresponding to the model with the greatest log-likelihood.}
+
+\item{reorder_with}{'class_prop' or one variable name. If 'class_prop', the order of latent class is determined by the proportion of each class. If one variable name, the order of latent class is determined by the conditional probability of the variable. The default is 'class_prop'.}
+
+\item{reorder_outcome}{a numeric value of a category of manifest variable. You can reorder latent classes with reference to the category of manifest variable. You must specify a manifest variable in \code{reorder_with} argment. The default is 1.}
+}
 \description{
-Useful short cut for \code{poLCA::poLCA}.
 you get a result table for reporting with the other functions like \code{poLCA_check_class} or \code{poLCA_BLRT}.
+}
+\examples{
+# example data
+data('carcinoma', package = 'poLCA')
+
+# estimate 2 class model to 3 class model
+result <- poLCA_result(
+  formula = as.matrix(carcinoma) ~ 1,
+  data = carcinoma,
+  nclass = 2:3,
+  maxiter = 6000,
+  nrep = 1,
+  verbose = TRUE
+)
+
+}
+\seealso{
+\code{\link[poLCA:poLCA]{poLCA::poLCA()}}
 }

@@ -1,0 +1,148 @@
+---
+title: "こわくない潜在クラス"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{こわくない潜在クラス}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, 
+  eval = TRUE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+
+## はじめに
+
+Rで潜在クラスをするときにはいろいろ選択肢があるが、個人的には`poLCA`パッケージを使うことが多い。
+
+ここでは、`poLCA`をより簡単に使えるようにした自作関数などを用いながら、潜在クラス分析のやり方を簡単に解説する。
+
+## 前準備
+
+- `kamaken`パッケージをロードする
+- `poLCA`パッケージの`carcinoma`データを使用する
+  - 子宮頚部に癌腫が存在するか否かについて、118患者に対する7人の病理学者の診断結果
+  - 1であれば陰性、2であれば陽性
+- おそらく、絶対に陰性、絶対に陽性、判断が微妙みたいなクラスが出てきそう
+- 顕在変数のカテゴリは1以上の整数にしておく必要があるので、適宜変換する
+
+```{r, message=FALSE}
+library(tidyverse)
+library(kamaken)
+
+data('carcinoma', package = 'poLCA')
+
+carcinoma |> 
+  count(A, B, C, D, E, F, G) 
+
+```
+
+
+## 潜在クラス分析の実行
+
+### formulaの書き方
+
+poLCA関数に渡すformulaは書き方に慣れが必要
+
+基本的にはモデルに投入する変数を選択→ matrixに変換→ ~ 1と最後に書く
+
+また，~ 1の1の代わりに，共変量（例えばデータセット内に存在する年齢とかの変数）を書けば，多項ロジット潜在クラス分析になる
+
+```{r}
+formula <- as.matrix(carcinoma) ~ 1
+```
+
+### 推定
+
+クラス数を2から4まで変化させながら潜在クラスを推定
+
+`kamaken::poLCA_result`を使用する
+
+- nclass：クラス数を指定
+- maxiter：最大対数尤度を求める反復計算を最大何回行うかを表し、この回数を超えても解が収束しない場合、エラーが出る
+- nrep：局所解の問題に対処するために、何回モデルを回すかを表し、この回数分初期値を変えながら潜在クラスの推定を行うことができる
+- verbose：推定の詳細を表示するかどうか。有用なエラーを見逃す可能性があるので基本的にはTRUEにする
+
+```{r}
+
+result <- poLCA_result(
+  formula = formula,
+  data = carcinoma,
+  nclass = 2:4,
+  maxiter = 6000,
+  nrep = 5,
+  verbose = FALSE
+)
+
+```
+
+## 結果の確認
+
+### モデル選択
+
+`kamaken::poLCA_BLRT`を使用する
+
+
+- AICやBICを参考にクラス数を決定（値が小さいほど当てはまりの良いモデルとされる）
+- AIC、BICともに3クラスで最も小さくなっているので、3クラスを採用
+
+```{r}
+
+poLCA_BLRT(result)
+
+```
+
+
+### クラスの特徴の把握
+
+`kamaken::poLCA_check_class`を使用する
+
+3クラスの場合の結果を確認
+
+- クラス1はDとF以外から陽性と判断されている
+- クラス2はほぼ全員から陰性と判断されている
+- クラス3は判断する人によって結果がかなり異なる
+
+だいたい冒頭の読み通りな気がする。
+
+```{r}
+
+poLCA_check_class(result, nclass = 3) |> 
+  # 表示桁数を3桁にする
+  mutate(across(`1`:`3`, \(x) sprintf('%.3f', x)))
+
+```
+
+
+- 2値変数の場合、こんな感じの図も役にたつ
+
+```{r}
+
+poLCA_check_class(result, nclass = 3) |> 
+  # 2：陽性の応答確率のみを抽出
+  filter(outcome == 2) |> 
+  # 縦持ちにする
+  pivot_longer(
+    cols = !c(variable, outcome),
+    names_to = 'class',
+    values_to = 'prob'
+  ) |> 
+  ggplot(aes(variable, prob, color = class, group = class))+
+  geom_line()+
+  geom_point()+
+  theme_bw()
+
+```
+
+## 参考文献
+
+- [poLCAの使い方](https://www.jstatsoft.org/article/view/v042i10)
+- [三輪哲，2009，「潜在クラスモデル入門」『理論と方法』24(2): 345–56．](https://doi.org/10.11218/ojjams.24.345)
+- [藤原翔・伊藤理史・谷岡謙，2012，「潜在クラス分析を用いた計量社会学的アプローチ――地位の非一貫性，格差意識，権威主義的伝統主義を例に」『年報人間科学』33: 43–68．](https://doi.org/10.18910/12447
+)

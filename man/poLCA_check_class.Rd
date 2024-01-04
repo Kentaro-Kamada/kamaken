@@ -2,10 +2,15 @@
 % Please edit documentation in R/poLCA_check_class.R
 \name{poLCA_check_class}
 \alias{poLCA_check_class}
-\title{format a result of latent class analysis}
+\title{format a result of latent class analysis with \code{poLCA_result}}
 \usage{
 poLCA_check_class(.poLCA_result_table, nclass)
 }
+\arguments{
+\item{.poLCA_result_table}{an object exported from \code{poLCA_result()}}
+
+\item{nclass}{number of latent classes to check class property}
+}
 \description{
-format a result of latent class analysis
+format a result of latent class analysis with \code{poLCA_result}
 }

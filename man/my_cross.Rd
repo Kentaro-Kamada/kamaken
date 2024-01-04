@@ -2,7 +2,7 @@
 % Please edit documentation in R/my_cross.R
 \name{my_cross}
 \alias{my_cross}
-\title{Generate a contingency table.}
+\title{Cross tabulations for categorical variables}
 \usage{
 my_cross(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALSE)
 }

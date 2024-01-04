@@ -1,4 +1,4 @@
-# Cross tabulations for categorical variables
+#' Cross tabulations for categorical variables
 #'
 #' Generate a contingency table.
 #'

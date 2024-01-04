@@ -1,4 +1,7 @@
-# kamaken
+---
+title: "kamaken"
+format: gfm
+---
 
 <!-- README.md is generated from README.qmd. Please edit that file -->
 
@@ -6,17 +9,23 @@
 
 - useful functions only for the author of this package
 
-This package contains functions customized for the author’s workflow.
-This package could be suddenly modified for the author’s convinience.
+This package contains functions customized for the author's workflow. 
+This package could be suddenly modified for the author's convinience.  
+
 
 ## Installation
 
-``` r
+
+```{r}
+#| eval: false
+
 if(!require(remotes)) install.packages("remotes")
 remotes::install_github("Kentaro-Kamada/kamaken")
 
 library(kamaken)
+
 ```
+
 
 ## Usage
 
