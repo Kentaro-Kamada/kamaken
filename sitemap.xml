@@ -1,66 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/404.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/articles/easyLCA.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/index.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/describe_d.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/describe_d_.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/haven_value_label.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/haven_variable_label.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/lem.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/my_cross.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/my_cross_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/p_star.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/pdf_ocr.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/poLCA_BLRT.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/poLCA_check_class.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/poLCA_result.html</loc>
-  </url>
-  <url>
-    <loc>https://kentaro-kamada.github.io/kamaken/reference/rdunif.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://kentaro-kamada.github.io/kamaken/404.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/LICENSE-text.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/LICENSE.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/articles/easyLCA.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/articles/index.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/authors.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/index.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/describe_d.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/describe_d_.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/haven_value_label.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/haven_variable_label.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/index.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/lem.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/my_cross.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/my_cross_plot.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/p_star.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/pdf_ocr.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/poLCA_BLRT.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/poLCA_check_class.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/poLCA_result.html</loc></url>
+<url><loc>https://kentaro-kamada.github.io/kamaken/reference/rdunif.html</loc></url>
 </urlset>
+
