@@ -1,9 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   easyLCA: easyLCA.html
-last_built: 2024-09-16T07:25Z
+last_built: 2024-10-08T10:31Z
 urls:
   reference: https://kentaro-kamada.github.io/kamaken/reference
   article: https://kentaro-kamada.github.io/kamaken/articles
