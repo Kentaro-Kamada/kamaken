@@ -1,0 +1,390 @@
+---
+title: "PIAACにおける標準誤差の推定"
+format: 
+  html:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{PIAACにおける標準誤差の推定}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+execute:
+  echo: true
+  eval: true
+  warning: false
+---
+
+## はじめに
+
+PIAACやPISAといった複雑な調査データでは特殊な方法で標準誤差を推定する必要がある。このノートでは、PIAACのデータを例に標準誤差の推定方法を紹介する。[^1]
+
+以下、
+
+1. 標準誤差の推定式を概観
+1. 平均値を例に、`srvyr`パッケージによる推定と手動での推定を比較
+1. `kamaken::gcom_jack`を利用した因果効果の推定
+
+を行う。
+
+## 前準備
+
+### パッケージ読み込み
+
+```{r}
+#| message: false
+
+library(tidyverse)
+library(haven)
+library(survey)
+library(srvyr)
+library(kamaken)
+
+kable <- partial(knitr::kable, digits = 3)
+
+```
+
+### データ読み込み
+
+- PIAAC 1st cycleの日本データ（SPSS形式）
+  - <https://webfs.oecd.org/piaac/puf-data/SPSS/prgjpnp1.sav>
+- 変数の名前を適宜変更しておく
+
+```{r}
+
+data <- read_sav('https://webfs.oecd.org/piaac/puf-data/SPSS/prgjpnp1.sav')
+
+df <- 
+  data |> 
+  # 変数を絞る
+  select(
+    country = CNTRYID, 
+    id = SEQID,
+    age = AGE_R, 
+    gender = GENDER_R, 
+    region = REG_TL2, 
+    edu = B_Q01a, 
+    medu = J_Q06b, 
+    fedu = J_Q07b, 
+    numbooks = J_Q08,
+    sampling_weight = SPFWT0, 
+    # 読解力、数的思考力、ITスキルのスコア
+    matches('^PV'), 
+    # Replicate weights
+    matches(str_c('SPFWT', 1:80)),
+    VEMETHOD
+  ) |> 
+  # 変数名を小文字に変換
+  rename_with(str_to_lower) |> 
+  as_factor() |> 
+  mutate(
+    age = as.character(age) |> parse_double(),
+    # 年齢をカテゴリ化
+    agegroup = cut(
+      age,
+      breaks = c(15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65),
+      labels = c('16-20', '21-25', '26-30', '31-35', '36-40', '41-45', '46-50', '51-55', '56-60', '61-65')
+    ),
+    # 大学卒業ダミー
+    univ = case_match(
+      edu,
+      'No formal qualification or below ISCED 1' ~ 0,
+      'ISCED 2' ~ 0,
+      'ISCED 3C shorter than 2 years' ~ 0,
+      'ISCED 3C 2 years or more' ~ 0,
+      'ISCED 3A-B' ~ 0,
+      'ISCED 3 (without distinction A-B-C, 2y+)' ~ 0,
+      'ISCED 4 (without distinction A-B-C)' ~ 0,
+      'ISCED 5B' ~ 0,
+      'ISCED 5A, bachelor degree' ~ 1,
+      'ISCED 5A, master degree' ~ 1,
+      'ISCED 6' ~ 1,
+      'Foreign qualification' ~ NA,
+      NA ~ NA
+    )
+  )
+
+  
+```
+
+## 標準誤差の推定式
+
+- jackknife法による標準誤差
+
+$$
+\mathrm{SE}_\theta = \sqrt{h\sum_{r=1}^{R} (\hat{\theta}_{(r)} - \hat{\theta})^2}
+$$
+
+- $R$：反復回数、replicate weightの数（PIAACは80）
+- $\hat{\theta}_{(r)}$：$r$番目のreplicate weightを用いた推定値
+- $\hat{\theta}$：全体の推定値（サンプリングウェイトを用いた推定値）
+- $h$：乗数、 Jackknife法のバリエーションによって異なる
+  - JK1の場合は$h = \frac{R-1}{R}$
+  - JK2の場合は$h = 1$
+
+## 平均値の推定
+
+- 点推定値
+- jackknife法による標準誤差
+
+の二つを推定する
+
+### packageによる推定
+
+- `survey`パッケージ（のラッパーの`srvyr`パッケージ）を用いる
+- `type`: 標準誤差の推定方法
+  - PIAACでは`JK1`の国と`JK2`の国が混在（変数`VEMETHOD`にどちらを使用すれば良いかが書かれている）
+  - 日本は`JK2`で推定する
+
+```{r}
+
+df_design <- 
+  df |> 
+  # 調査デザインの設定
+  as_survey_rep(
+    weights = sampling_weight, 
+    repweights = matches('spfwt'), 
+    type = 'JK2',
+    mse = TRUE
+  )
+
+result_literacy <- 
+  df_design |> 
+  # 読解力の各PVごとに平均値と標準誤差を計算
+  summarise(
+    across(matches('pvlit'), \(x) survey_mean(x, na.rm = TRUE))
+  ) 
+  
+# 結果の整理
+package <- 
+  result_literacy |>
+  rename_with(\(x) str_replace(x, '(\\d)$', '\\1_estimate')) |>
+  # 縦持ちに変換
+  pivot_longer(
+    cols = matches('pvlit'),
+    names_to = c('literacy', '.value'),
+    names_pattern = '(pvlit\\d{1,2})_(.+)',
+  ) 
+
+kable(package)
+
+```
+
+### 手作業による推定
+
+```{r}
+
+point_estimate <-
+  df |> 
+  select(sampling_weight, matches('(pvlit|spfwt)')) |> 
+  summarise(
+    across(
+      matches('pvlit'), 
+      \(x) weighted.mean(x, w = sampling_weight, na.rm = TRUE), 
+      .names = '{.col}_estimate'
+    )
+  ) |> 
+  pivot_longer(
+    cols = matches('pvlit'),
+    names_to = c('literacy', '.value'),
+    names_pattern = '(pvlit\\d{1,2})_(.+)',
+  )
+  
+# jackknife法に用いるウェイト（80個）
+jackweight <- select(df, matches('spfwt'))
+
+jack_estimate <-
+  # 各ウェイトを用いて、それぞれのPVの平均値を計算
+  map(
+    jackweight, \(weight) 
+    df |> 
+      summarise(
+        across(
+          matches('pvlit'),
+          \(x) weighted.mean(x, w = weight, na.rm = TRUE),
+          .names = '{.col}_jack'
+        )
+      )
+  ) |> 
+  bind_rows(.id = 'replicate') |> 
+  pivot_longer(
+    cols = matches('pvlit'),
+    names_to = c('literacy', '.value'),
+    names_pattern = '(pvlit\\d{1,2})_(.+)',
+  )
+
+handmade <- 
+  # 点推定値にジャックナイフウェイトを用いた推定値を結合
+  left_join(
+    point_estimate, 
+    jack_estimate, 
+    by = join_by(literacy)
+  ) |> 
+  # 標準誤差の計算
+  summarise(
+    estimate = mean(estimate),
+    se = sqrt(sum((estimate - jack)^2)),
+    .by = literacy
+  )
+
+kable(handmade)
+
+```
+
+### 結果の比較
+
+- 結果は一致する
+
+```{r}
+
+left_join(
+  package, 
+  handmade, 
+  by = join_by(literacy),
+  suffix = c('_package', '_handmade')
+) |> 
+  select(literacy, estimate_package, estimate_handmade, se_package, se_handmade) |>
+  mutate(
+    diff_estimate = estimate_package - estimate_handmade,
+    diff_se = se_package - se_handmade
+  ) |> 
+  kable()
+
+```
+
+## PVの統合
+
+- 読解力、数的思考力などは複数のPV（Plausible Values）という形で測定
+- PVを用いた分析の結果は、多重代入法の要領で統合が可能[^2]
+- `kamaken::pool_rubin`を用いた統合
+
+- 平均値
+
+$$
+\hat{\theta} = \frac{1}{M} \sum_{m=1}^{M} \hat{\theta}_{(m)}
+$$
+
+- 各PVにおいて生じる分散の平均（分散の平均値）
+
+$$
+\bar{U} = \frac{1}{M} \sum_{m=1}^{M} \hat{U}_{(m)}
+$$
+
+- PV間で生じる分散（平均値の分散）
+
+$$
+B = \frac{1}{M-1} \sum_{m=1}^{M} (\hat{\theta}_{(m)} - \hat{\theta})^2
+$$
+
+- 統合された推定値の標準誤差
+
+$$
+\hat{SE} = \sqrt{\bar{U} + \left(1 + \frac{1}{M}\right)B}
+$$
+
+
+```{r}
+
+handmade |> 
+  pool_rubin(std.error = se, term = literacy) |> 
+  kable()
+
+```
+
+
+## より複雑なケース
+
+### 因果効果の推定
+
+- 高等教育進学が読解力に与える因果効果の推定
+- G-computation[^3]によるATEの推定
+- `kamaken::gcomp_jack`による推定
+  - `.outcome`：アウトカム変数
+  - `.treatment`：0-1の二値変数
+  - `.formula_rhs`：回帰式の右辺を指定
+    - ` ~ treatment + covariate1 + covariate2 + ...`のような形
+    - 固定効果も指定可能：` ~ 1 | treatment + fixed_effect1 + fixed_effect2 + ...`
+    - `fixest`パッケージでの`formula`に準拠
+  - `.estimand`：推定対象
+    - `cfmean`：$\mathrm{E}[Y^1]$と$\mathrm{E}[Y^0]$
+    - `ATE`：平均処置効果
+  - `.weights`：サンプリングウェイト
+  - `.repweights`：ジャックナイフ法に用いるreplicate weights
+  - `.type`：ジャックナイフ法のタイプ
+  - `.by`：効果の異質性を見たい変数を指定（`NULL`なら集団全体）
+
+### 推定結果
+
+```{r}
+#| message: false
+
+# 並列化
+future::plan('multisession')
+
+df |> 
+  filter(age >= 26) |> 
+  gcomp_jack(
+    .outcome = pvlit1,
+    .treatment = univ,
+    .formula_rhs = ~ 1 | univ^gender^agegroup,
+    .estimand = 'ATE',
+    .weights = sampling_weight,
+    .repweights = matches('spfwt'),
+    .type = 'JK2',
+    .by = c(gender, agegroup)
+  ) |> 
+  kable()
+
+```
+
+### 10個のPVに対して一括で推定
+
+- `purrr::map`などで、変数名を変えながら繰り返し推定する
+- 注意点として、外部の文字列ベクトルで`.outcome`を指定しようとするとエラーが生じる。`!!`や`{{`を用いてunquoteする。
+
+```{r}
+#| message: false
+
+# 読解力PVの変数名を取得
+pvs <- df |> select(matches('pvlit')) |> names()
+
+result <- 
+  map(
+    pvs,
+    \(x) gcomp_jack(
+      .data = df |> filter(age >= 26),
+      # mapで回すときは`!!`または`{{`を使う
+      .outcome = !!x,
+      # .outcome = {{x}},
+      .treatment = univ,
+      .formula_rhs = ~ 1 | univ^gender^agegroup,
+      .estimand = 'ATE',
+      .weights = sampling_weight,
+      .repweights = matches('spfwt'),
+      .type = 'JK2',
+      .by = gender
+    )) |> 
+  bind_rows(.id = 'pv')
+
+result
+
+```
+
+### 結果の統合
+
+```{r}
+
+result |> 
+  pool_rubin(term = c(estimand, gender)) |> 
+  kable()
+
+```
+
+
+
+[^1]: StataでのPIAACの分析パッケージについては、以下の論文を参照  
+Jakubowski, Maciej & Artur Pokropek, 2019, "piaactools: A program for data analysis with PIAAC data," _The Stata Journal_, 19(1): 112-128. <https://doi.org/10.1177/1536867X19830909>
+
+[^2]: Buuren, Stef van. 2018. _Flexible Imputation of Missing Data_. 2nd ed. New York: Chapman & Hall/CRC. <https://stefvanbuuren.name/fimd/>
+
+[^3]: Hernán, Miguel A. & James M. Robins, 2024, _Causal Inference: What If_, Boca Raton: Chapman & Hall/CRC. <https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/>
+
+
