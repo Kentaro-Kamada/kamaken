@@ -16,6 +16,7 @@ VignetteBuilder: quarto
 URL: https://kentaro-kamada.github.io/kamaken/, https://github.com/Kentaro-Kamada/kamaken
 BugReports: https://github.com/Kentaro-Kamada/kamaken/issues
 Suggests: 
+    quarto,
     testthat (>= 3.0.0),
     tidyverse
 Imports:

@@ -1481,6 +1481,12 @@
       ],
       "Hash": "949ca99a6d20c4ff8212026b3b5559af"
     },
+    "quarto": {
+      "Package": "quarto",
+      "Version": "1.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
     "ragg": {
       "Package": "ragg",
       "Version": "1.3.3",
