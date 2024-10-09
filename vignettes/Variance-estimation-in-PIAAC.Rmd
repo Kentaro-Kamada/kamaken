@@ -1,17 +1,22 @@
 ---
 title: "PIAACにおける標準誤差の推定"
-format: 
-  html:
-    toc: true
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{PIAACにおける標準誤差の推定}
-  %\VignetteEngine{quarto::html}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-execute:
-  echo: true
-  eval: true
-  warning: false
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, 
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE
+)
+ 
+```
+
 
 ## はじめに
 
@@ -29,8 +34,7 @@ PIAACやPISAといった複雑な調査データでは特殊な方法で標準�
 
 ### パッケージ読み込み
 
-```{r}
-#| message: false
+```{r, message=FALSE}
 
 library(tidyverse)
 library(haven)
@@ -284,7 +288,7 @@ $$
 ```{r}
 
 handmade |> 
-  pool_rubin(std.error = se, term = literacy) |> 
+  pool_rubin(std.error = se) |> 
   kable()
 
 ```
@@ -313,8 +317,7 @@ handmade |>
 
 ### 推定結果
 
-```{r}
-#| message: false
+```{r, message=FALSE}
 
 # 並列化
 future::plan('multisession')
@@ -340,8 +343,7 @@ df |>
 - `purrr::map`などで、変数名を変えながら繰り返し推定する
 - 注意点として、外部の文字列ベクトルで`.outcome`を指定しようとするとエラーが生じる。`!!`や`{{`を用いてunquoteする。
 
-```{r}
-#| message: false
+```{r, message=FALSE}
 
 # 読解力PVの変数名を取得
 pvs <- df |> select(matches('pvlit')) |> names()
