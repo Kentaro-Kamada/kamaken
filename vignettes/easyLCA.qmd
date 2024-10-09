@@ -1,20 +1,16 @@
 ---
 title: "こわくない潜在クラス"
-output: rmarkdown::html_vignette
+format: 
+  html:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{こわくない潜在クラス}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
+execute:
+  echo: true
+  eval: true
 ---
-
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE, 
-  eval = TRUE,
-  message = FALSE,
-  comment = "#>"
-)
-```
 
 
 ## はじめに
@@ -32,7 +28,9 @@ Rで潜在クラスをするときにはいろいろ選択肢があるが、個�
 - おそらく、絶対に陰性、絶対に陽性、判断が微妙みたいなクラスが出てきそう
 - 顕在変数のカテゴリは1以上の整数にしておく必要があるので、適宜変換する
 
-```{r, message=FALSE}
+```{r}
+#| message: false
+
 library(tidyverse)
 library(kamaken)
 
