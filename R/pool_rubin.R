@@ -21,7 +21,7 @@ pool_rubin <- function(.tibble, estimate = estimate, std.error = std.error, term
   std.error <- enquo(std.error)
   term <- enquo(term)
   .tibble |>
-    mutate(variance__ = !!std.error^2) |>
+    mutate(variance__ = (!!std.error)^2) |>
     summarise(
       M = n(),
       estimate.combined = mean(!!estimate),
