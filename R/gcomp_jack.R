@@ -16,7 +16,7 @@
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @importFrom broom augment
 #' @importFrom fixest feols
-#' @importFrom furrr future_map future_options
+#' @importFrom furrr future_map furrr_options
 #'
 #' @export
 #'

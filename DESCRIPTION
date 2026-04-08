@@ -1,7 +1,7 @@
 Type: Package
 Package: kamaken
 Title: Useful Toolbox for Data Analysis in Social Science
-Version: 0.3.2
+Version: 0.3.3
 Authors@R: 
     person("Kentaro", "Kamada", , "kamaken0705@g.ecc.u-tokyo.ac.jp", role = c("aut", "cre"))
 Description: More about what it does (maybe more than one line) Use four
@@ -11,7 +11,7 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 URL: https://kentaro-kamada.github.io/kamaken/, https://github.com/Kentaro-Kamada/kamaken
 BugReports: https://github.com/Kentaro-Kamada/kamaken/issues
 Suggests: 
