@@ -1,0 +1,92 @@
+# kamaken
+
+## Overview
+
+- useful functions only for the author of this package
+
+This package contains functions customized for the author’s workflow.
+This package could be suddenly modified for the author’s convinience.
+
+## Installation
+
+``` r
+if(!require(remotes)) install.packages("remotes")
+remotes::install_github("Kentaro-Kamada/kamaken")
+
+library(kamaken)
+```
+
+## Usage
+
+Under Construction
+
+# Package index
+
+## All functions
+
+- [`describe_d()`](https://kentaro-kamada.github.io/kamaken/reference/describe_d.md)
+  : Show Discriptive statistics for categorical variables
+
+- [`describe_d_()`](https://kentaro-kamada.github.io/kamaken/reference/describe_d_.md)
+  :
+
+  Show Discriptive statistics for categorical variables. The output is
+  formatted with `gt` so that you can easily include it in Rmarkdown
+  documents.
+
+- [`gcomp_jack()`](https://kentaro-kamada.github.io/kamaken/reference/gcomp_jack.md)
+  : Estimate the causal effect by G-computation with jackknife variance
+  estimation.
+
+- [`haven_value_label()`](https://kentaro-kamada.github.io/kamaken/reference/haven_value_label.md)
+  : Create a list of value labels from SPSS or Stata data
+
+- [`haven_variable_label()`](https://kentaro-kamada.github.io/kamaken/reference/haven_variable_label.md)
+  : Create a list of variable labels from SPSS or Stata data
+
+- [`lem()`](https://kentaro-kamada.github.io/kamaken/reference/lem.md) :
+
+  Activate LEM through
+  [`system2()`](https://rdrr.io/r/base/system2.html).
+
+- [`my_cross()`](https://kentaro-kamada.github.io/kamaken/reference/my_cross.md)
+  : Cross tabulations for categorical variables
+
+- [`my_cross_plot()`](https://kentaro-kamada.github.io/kamaken/reference/my_cross_plot.md)
+  : Generate a plot converted from a contingency table.
+
+- [`p_star()`](https://kentaro-kamada.github.io/kamaken/reference/p_star.md)
+  : convert p value to stars in a tibble.
+
+- [`pdf_ocr()`](https://kentaro-kamada.github.io/kamaken/reference/pdf_ocr.md)
+  : This function needs some outside modules tesseract, poppler and
+  qpdf. These can be installed from homebrew.
+
+- [`poLCA_BLRT()`](https://kentaro-kamada.github.io/kamaken/reference/poLCA_BLRT.md)
+  :
+
+  Goodness of Fit of LCA Models with `poLCA_result`
+
+- [`poLCA_check_class()`](https://kentaro-kamada.github.io/kamaken/reference/poLCA_check_class.md)
+  :
+
+  format a result of latent class analysis with `poLCA_result`
+
+- [`poLCA_result()`](https://kentaro-kamada.github.io/kamaken/reference/poLCA_result.md)
+  :
+
+  Useful short cut for
+  [`poLCA::poLCA`](https://rdrr.io/pkg/poLCA/man/poLCA.html).
+
+- [`pool_rubin()`](https://kentaro-kamada.github.io/kamaken/reference/pool_rubin.md)
+  : Integration of estimation results by multiple imputation method
+  following rubin's rule.
+
+- [`rdunif()`](https://kentaro-kamada.github.io/kamaken/reference/rdunif.md)
+  : Generate random sample from a discrete uniform distribution
+
+# Articles
+
+### All vignettes
+
+- [こわくない潜在クラス](https://kentaro-kamada.github.io/kamaken/articles/easyLCA.md):
