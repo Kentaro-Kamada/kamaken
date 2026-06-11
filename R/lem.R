@@ -43,9 +43,17 @@ lem <- function(lat = '',
 
   # inpとoutのディレクトリ作成
   if(!dir.exists(path)) {
-    dir.create(path)
-    dir.create(str_c(path, '/inp'))
-    dir.create(str_c(path, '/out'))
+    dir.create(path, recursive = TRUE)
+  }
+
+  inp_dir <- str_c(path, '/inp')
+  out_dir <- str_c(path, '/out')
+
+  if(!dir.exists(inp_dir)) {
+    dir.create(inp_dir, recursive = TRUE)
+  }
+  if(!dir.exists(out_dir)) {
+    dir.create(out_dir, recursive = TRUE)
   }
 
   # ファイルの削除
@@ -53,11 +61,11 @@ lem <- function(lat = '',
 
   # スクリプト書き出し
   walk(see, ~{write_lines(c(lat, man, con, dim, lab, mod, rec, des, sta, dum, dat, ite, .),
-                          file = str_c(path, '/inp/', str_remove(., ' '), '.inp'))})
+                          file = str_c(inp_dir, '/', str_remove(., ' '), '.inp'))})
 
 
   # inputファイルとoutputファイルのパス指定
-  inp_path <- list.files(str_c(path, '/inp'), full.names = T)
+  inp_path <- list.files(inp_dir, full.names = T)
   out_path <- str_replace_all(inp_path, 'inp', 'out')
 
   # OS判別
@@ -76,7 +84,7 @@ lem <- function(lat = '',
   walk(args,
        ~{system2(command, args = ., env = env,
                  stdout = F, stderr = F, wait = F)
-         Sys.sleep(0.8)}
+         Sys.sleep(2)}
   )
 
 }
