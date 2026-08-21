@@ -9,7 +9,6 @@
 #' @param p.value if `TRUE`, calculates p value of chi-squared test. default is `TRUE`
 #' @param adjres if `TRUE`, calculates adjusted residual and shows the results of chi-square residual tests. default is `FALSE`
 #'
-#' @importFrom magrittr %>%
 #' @importFrom rlang enquo
 #' @importFrom rlang as_name
 #' @importFrom rlang as_label
@@ -23,9 +22,8 @@
 #' @importFrom tidyr pivot_longer
 #' @importFrom tidyr pivot_wider
 #' @importFrom tidyr unite
-#' @importFrom purrr map_chr
 #' @importFrom stringr str_c
-#' @importFrom stringr str_interp
+#' @importFrom stringr str_glue
 #' @importFrom forcats fct_na_value_to_level
 #' @importFrom forcats fct_drop
 #' @importFrom forcats fct_unique
@@ -34,7 +32,7 @@
 #' @importFrom janitor chisq.test
 #' @importFrom janitor adorn_totals
 #' @importFrom janitor adorn_percentages
-#' @importFrom vcd assocstats
+#' @importFrom DescTools CramerV
 #' @importFrom gt gt
 #' @importFrom gt tab_spanner
 #' @importFrom gt tab_source_note
@@ -44,110 +42,119 @@
 #' @export
 #'
 
-my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALSE){
+my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALSE) {
   .x <- enquo(.x)
   .y <- enquo(.y)
 
-  .contents_.y <- pull(.data, !!.y)
-  if(any(class(.contents_.y) == 'factor')){
-    .contents_.y <-
-      fct_na_value_to_level(.contents_.y, level = 'NA_') %>%
-      fct_drop() %>%
-      fct_unique() %>%
-      as.character()
-  } else {
-    .contents_.y <-
-      factor(.contents_.y) %>%
-      fct_na_value_to_level(level = 'NA_') %>%
-      fct_drop() %>%
-      fct_unique() %>%
-      as.character()
-  }
+  .y_levels <-
+    .data |>
+    pull(!!.y) |>
+    as_factor() |>
+    fct_na_value_to_level(level = "NA_") |>
+    fct_drop() |>
+    fct_unique() |>
+    as.character()
 
   .tabyl <- tabyl(.data, !!.x, !!.y)
 
-  N <-
-    .tabyl %>%
-    adorn_totals(where = c('row', 'col')) %>%
-    as_tibble() %>%
-    pull(Total) %>%
-    # 合計のところの括弧
-    str_c('（', ., '）')
+  .tabyl_with_totals <-
+    .tabyl |>
+    adorn_totals(where = c("row", "col"))
 
-  if(any(is.na(select(.data, !!.x, !!.y)))){
-    .p.value <- NA
-    .cramer <- NA
-  } else {
-    .p.value <-
-      chisq.test(.tabyl) %>%
-      .$p.value
+  .n <- pull(.tabyl_with_totals, Total)
 
-    .cramer <-
-      .tabyl %>%
-      untabyl() %>%
-      select(-1) %>%
-      as.matrix() %>%
-      assocstats() %>%
-      .$cramer
+  # 欠損値の有無を確認
+  .has_missing <- anyNA(select(.data, !!.x, !!.y))
+  .chisq <- NULL
+  .p_value <- NA_real_
+  .cramer <- NA_real_
+
+  # 欠損値がない場合にのみp値を計算
+  if (!.has_missing && (isTRUE(p.value) || isTRUE(adjres))) {
+    .chisq <- chisq.test(.tabyl)
+    .p_value <- .chisq$p.value
   }
 
+  # Cramer's Vを計算する
+  if (!.has_missing && isTRUE(cramer)) {
+    .cramer <-
+      .tabyl |>
+      untabyl() |>
+      select(!(!!.x)) |>
+      as.matrix() |>
+      CramerV()
+  }
+
+  # パーセンテージを計算し、欠損値を"NA_"に置換する
   .crosstab_raw <-
-    .tabyl %>%
-    adorn_totals(where = c('row', 'col')) %>%
-    adorn_percentages(denominator = 'row') %>%
-    as_tibble() %>%
-    mutate(across(.cols = 1, .fns = ~{replace_na(., replace = 'NA_')}
-    ))
+    .tabyl_with_totals |>
+    adorn_percentages(denominator = "row") |>
+    as_tibble() |>
+    mutate(!!.x := replace_na(!!.x, replace = "NA_"))
 
-  if(adjres == TRUE & !is.na(.p.value)) {
+  # adjresがTRUEの場合、調整残差を計算し、p値を付加する
+  if (isTRUE(adjres) && !is.null(.chisq)) {
     .adjres <-
-      chisq.test(.tabyl) %>%
-      .$stdres %>%
-      pivot_longer(cols = -1, names_to = 'name', values_to = 'adjres')
+      .chisq$stdres |>
+      pivot_longer(cols = !(!!.x), names_to = "name", values_to = "adjres")
 
     .crosstab_raw <-
-      pivot_longer(.crosstab_raw, cols = -1, names_to = 'name', values_to = 'percent')
-
-    .crosstab_raw <-
-      left_join(.crosstab_raw, .adjres, by = c(as_name(.x), 'name')) %>%
+      .crosstab_raw |>
+      pivot_longer(
+        cols = !(!!.x),
+        names_to = "name",
+        values_to = "percent"
+      ) |>
+      left_join(.adjres, by = c(as_name(.x), "name")) |>
       mutate(
-        p.value =
-          abs(adjres) %>%
-          pnorm(lower.tail = FALSE) %>%
-          `*`(2),
-        percent = map_chr(percent, ~str_interp('$[.1f]{.*100}'))
-      ) %>%
-      select(-adjres) %>%
-      kamaken::p_star(p.value) %>%
-      unite(col = 'percent', percent:p.value, sep = '') %>%
+        p.value = 2 * pnorm(abs(adjres), lower.tail = FALSE),
+        percent = scales::percent(percent, accuracy = 0.1)
+      ) |>
+      select(!adjres) |>
+      kamaken::p_star(p.value) |>
+      unite(col = "percent", percent:p.value, sep = "") |>
       pivot_wider(names_from = name, values_from = percent)
   } else {
     .crosstab_raw <-
-      .crosstab_raw %>%
-      mutate(across(where(is.numeric), ~map_chr(., ~str_interp('$[.1f]{.*100}')))
-      )
+      .crosstab_raw |>
+      mutate(across(where(is.numeric), \(x) scales::percent(x, accuracy = 0.1)))
   }
 
-  .crosstab_raw <-
-    .crosstab_raw %>%
-    mutate(across(.cols = 1, .fns = ~str_c(., '（％）'))) %>%
-    mutate(N = N)
+  # 度数を付加する
+  .crosstab_raw <- .crosstab_raw |> mutate(N = scales::number(.n, accuracy = 1, big.mark = ","))
 
   # gtによる整形
   .crosstab_gt <-
-    gt(.crosstab_raw) %>%
-    tab_spanner(label = as_label(.y),
-                columns = .contents_.y)
-  if(cramer == TRUE & p.value == TRUE){
-    .crosstab_gt <- tab_source_note(.crosstab_gt,
-                                    str_interp("Cramer's V = $[.3f]{.cramer}, chisq.test: p = $[.4f]{.p.value}"))
-  } else if(cramer == TRUE & p.value == FALSE) {
-    .crosstab_gt <- tab_source_note(.crosstab_gt,
-                                    str_interp("Cramer's V = $[.3f]{.cramer}"))
-  } else if(cramer == FALSE & p.value == TRUE) {
-    .crosstab_gt <- tab_source_note(.crosstab_gt,
-                                    str_interp("chisq.test: p = $[.4f]{.p.value}"))
+    .crosstab_raw |>
+    gt() |>
+    tab_spanner(label = as_label(.y), columns = .y_levels)
+
+  # 注釈の作成
+  .notes <- character()
+  if (isTRUE(cramer)) {
+    .notes <-
+      c(
+        .notes,
+        str_glue(
+          "Cramer's V = {scales::number(.cramer, accuracy = 0.001)}"
+        )
+      )
+  }
+  if (isTRUE(p.value)) {
+    .notes <-
+      c(
+        .notes,
+        str_glue(
+          "Pearson's Chi-squared test: {scales::pvalue(.p_value, prefix = c('p < ', 'p = ', 'p > '))}"
+        )
+      )
   }
 
-  return(.crosstab_gt)
+  if (length(.notes) > 0L) {
+    .crosstab_gt <-
+      .crosstab_gt |>
+      tab_source_note(str_c(.notes, collapse = ", "))
+  }
+
+  .crosstab_gt
 }

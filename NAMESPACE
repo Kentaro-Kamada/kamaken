@@ -19,113 +19,145 @@ export(poLCA_result)
 export(pool_rubin)
 export(print_all)
 export(rdunif)
-importFrom(broom,augment)
-importFrom(broom,glance)
-importFrom(broom,tidy)
-importFrom(dplyr,across)
-importFrom(dplyr,arrange)
-importFrom(dplyr,as_tibble)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,case_when)
-importFrom(dplyr,dense_rank)
-importFrom(dplyr,desc)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,lag)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,n)
-importFrom(dplyr,pick)
-importFrom(dplyr,pull)
-importFrom(dplyr,rename)
-importFrom(dplyr,row_number)
-importFrom(dplyr,select)
-importFrom(dplyr,summarise)
-importFrom(dplyr,tibble)
-importFrom(dplyr,transmute)
-importFrom(dplyr,ungroup)
+importFrom(DescTools,CramerV)
+importFrom(broom,
+  augment,
+  glance,
+  tidy
+)
+importFrom(dplyr,
+  across,
+  arrange,
+  as_tibble,
+  bind_rows,
+  case_when,
+  dense_rank,
+  desc,
+  filter,
+  group_by,
+  lag,
+  left_join,
+  mutate,
+  n,
+  pick,
+  pull,
+  rename,
+  row_number,
+  select,
+  summarise,
+  tibble,
+  transmute,
+  ungroup
+)
 importFrom(fixest,feols)
-importFrom(forcats,fct_na_value_to_level)
-importFrom(forcats,fct_rev)
-importFrom(forcats,fct_unique)
-importFrom(furrr,furrr_options)
-importFrom(furrr,future_map)
-importFrom(furrr,future_map2)
-importFrom(furrr,future_map2_dbl)
-importFrom(furrr,future_map_dbl)
-importFrom(furrr,future_pmap)
-importFrom(future,availableCores)
-importFrom(future,plan)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,coord_flip)
-importFrom(ggplot2,facet_grid)
-importFrom(ggplot2,geom_bar)
-importFrom(ggplot2,geom_label)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,guide_legend)
-importFrom(ggplot2,guides)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,position_fill)
-importFrom(ggplot2,scale_y_continuous)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,vars)
-importFrom(gt,cell_text)
-importFrom(gt,cells_body)
-importFrom(gt,cells_row_groups)
-importFrom(gt,cols_align)
-importFrom(gt,gt)
-importFrom(gt,pct)
-importFrom(gt,tab_options)
-importFrom(gt,tab_source_note)
-importFrom(gt,tab_spanner)
-importFrom(gt,tab_style)
+importFrom(forcats,
+  fct_drop,
+  fct_na_value_to_level,
+  fct_rev,
+  fct_unique
+)
+importFrom(furrr,
+  furrr_options,
+  future_map,
+  future_map2,
+  future_map2_dbl,
+  future_map_dbl,
+  future_pmap
+)
+importFrom(future,
+  availableCores,
+  plan
+)
+importFrom(ggplot2,
+  aes,
+  coord_flip,
+  facet_grid,
+  geom_bar,
+  geom_label,
+  ggplot,
+  guide_legend,
+  guides,
+  labs,
+  position_fill,
+  scale_y_continuous,
+  theme,
+  vars
+)
+importFrom(gt,
+  cell_text,
+  cells_body,
+  cells_row_groups,
+  cols_align,
+  gt,
+  pct,
+  tab_options,
+  tab_source_note,
+  tab_spanner,
+  tab_style
+)
 importFrom(haven,is.labelled)
-importFrom(janitor,adorn_percentages)
-importFrom(janitor,adorn_totals)
-importFrom(janitor,chisq.test)
-importFrom(janitor,tabyl)
-importFrom(janitor,untabyl)
+importFrom(janitor,
+  adorn_percentages,
+  adorn_totals,
+  chisq.test,
+  tabyl,
+  untabyl
+)
 importFrom(magrittr,"%>%")
-importFrom(pdftools,pdf_combine)
-importFrom(pdftools,pdf_convert)
-importFrom(pdftools,pdf_info)
-importFrom(poLCA,poLCA)
-importFrom(poLCA,poLCA.reorder)
-importFrom(poLCA,poLCA.simdata)
-importFrom(purrr,attr_getter)
-importFrom(purrr,is_null)
-importFrom(purrr,list_flatten)
-importFrom(purrr,map)
-importFrom(purrr,map2)
-importFrom(purrr,map2_dbl)
-importFrom(purrr,map2_dfr)
-importFrom(purrr,map_chr)
-importFrom(purrr,map_dbl)
-importFrom(purrr,pluck)
-importFrom(purrr,pmap)
-importFrom(purrr,walk)
-importFrom(purrr,walk2)
-importFrom(readr,parse_double)
-importFrom(readr,read_file)
-importFrom(readr,write_lines)
-importFrom(rlang,"f_lhs<-")
-importFrom(rlang,as_label)
-importFrom(rlang,as_name)
-importFrom(rlang,enquo)
-importFrom(rlang,ensym)
-importFrom(rlang,inherits_any)
-importFrom(rlang,new_formula)
+importFrom(pdftools,
+  pdf_combine,
+  pdf_convert,
+  pdf_info
+)
+importFrom(poLCA,
+  poLCA,
+  poLCA.reorder,
+  poLCA.simdata
+)
+importFrom(purrr,
+  attr_getter,
+  is_null,
+  list_flatten,
+  map,
+  map2,
+  map2_dbl,
+  map2_dfr,
+  map_chr,
+  map_dbl,
+  pluck,
+  pmap,
+  walk,
+  walk2
+)
+importFrom(readr,
+  parse_double,
+  read_file,
+  write_lines
+)
+importFrom(rlang,
+  "f_lhs<-",
+  as_label,
+  as_name,
+  enquo,
+  ensym,
+  inherits_any,
+  new_formula
+)
 importFrom(scales,label_percent)
-importFrom(stringr,str_c)
-importFrom(stringr,str_extract)
-importFrom(stringr,str_interp)
-importFrom(stringr,str_remove)
-importFrom(stringr,str_replace)
-importFrom(stringr,str_replace_all)
-importFrom(tidyr,nest)
-importFrom(tidyr,pivot_longer)
-importFrom(tidyr,pivot_wider)
-importFrom(tidyr,replace_na)
-importFrom(tidyr,unite)
-importFrom(tidyr,unnest)
-importFrom(vcd,assocstats)
+importFrom(stringr,
+  str_c,
+  str_extract,
+  str_glue,
+  str_interp,
+  str_remove,
+  str_replace,
+  str_replace_all
+)
+importFrom(tidyr,
+  nest,
+  pivot_longer,
+  pivot_wider,
+  replace_na,
+  unite,
+  unnest
+)
