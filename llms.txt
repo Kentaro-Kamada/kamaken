@@ -10,6 +10,7 @@ This package could be suddenly modified for the author’s convinience.
 ## Installation
 
 ``` r
+
 if(!require(remotes)) install.packages("remotes")
 remotes::install_github("Kentaro-Kamada/kamaken")
 

@@ -16,6 +16,7 @@ Rで潜在クラスをするときにはいろいろ選択肢があるが、個�
 - 顕在変数のカテゴリは1以上の整数にしておく必要があるので、適宜変換する
 
 ``` r
+
 library(tidyverse)
 library(kamaken)
 
@@ -59,6 +60,7 @@ poLCA関数に渡すformulaは書き方に慣れが必要
 1の1の代わりに，共変量（例えばデータセット内に存在する年齢とかの変数）を書けば，多項ロジット潜在クラス分析になる
 
 ``` r
+
 formula <- as.matrix(carcinoma) ~ 1
 ```
 
@@ -74,6 +76,7 @@ formula <- as.matrix(carcinoma) ~ 1
 - verbose：推定の詳細を表示するかどうか。有用なエラーを見逃す可能性があるので基本的にはTRUEにする
 
 ``` r
+
 result <- poLCA_result(
   formula = formula,
   data = carcinoma,
@@ -94,6 +97,7 @@ result <- poLCA_result(
 - AIC、BICともに3クラスで最も小さくなっているので、3クラスを採用
 
 ``` r
+
 poLCA_BLRT(result)
 ```
 
@@ -117,6 +121,7 @@ poLCA_BLRT(result)
 だいたい冒頭の読み通りな気がする。
 
 ``` r
+
 poLCA_check_class(result, nclass = 3) |> 
   # 表示桁数を3桁にする
   mutate(across(`1`:`3`, \(x) sprintf('%.3f', x)))
@@ -144,6 +149,7 @@ poLCA_check_class(result, nclass = 3) |>
 - 2値変数の場合、こんな感じの図も役にたつ
 
 ``` r
+
 poLCA_check_class(result, nclass = 3) |> 
   # 2：陽性の応答確率のみを抽出
   filter(outcome == 2) |> 
