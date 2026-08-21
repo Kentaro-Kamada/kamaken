@@ -27,6 +27,7 @@
 #' @importFrom stringr str_c
 #' @importFrom stringr str_interp
 #' @importFrom forcats fct_na_value_to_level
+#' @importFrom forcats fct_drop
 #' @importFrom forcats fct_unique
 #' @importFrom janitor tabyl
 #' @importFrom janitor untabyl
@@ -51,12 +52,14 @@ my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALS
   if(any(class(.contents_.y) == 'factor')){
     .contents_.y <-
       fct_na_value_to_level(.contents_.y, level = 'NA_') %>%
+      fct_drop() %>%
       fct_unique() %>%
       as.character()
   } else {
     .contents_.y <-
       factor(.contents_.y) %>%
       fct_na_value_to_level(level = 'NA_') %>%
+      fct_drop() %>%
       fct_unique() %>%
       as.character()
   }
