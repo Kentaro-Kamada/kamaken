@@ -51,6 +51,7 @@ importFrom(dplyr,
 )
 importFrom(fixest,feols)
 importFrom(forcats,
+  as_factor,
   fct_drop,
   fct_na_value_to_level,
   fct_rev,

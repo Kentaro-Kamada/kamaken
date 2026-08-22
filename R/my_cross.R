@@ -27,6 +27,7 @@
 #' @importFrom forcats fct_na_value_to_level
 #' @importFrom forcats fct_drop
 #' @importFrom forcats fct_unique
+#' @importFrom forcats as_factor
 #' @importFrom janitor tabyl
 #' @importFrom janitor untabyl
 #' @importFrom janitor chisq.test
@@ -34,6 +35,7 @@
 #' @importFrom janitor adorn_percentages
 #' @importFrom DescTools CramerV
 #' @importFrom gt gt
+#' @importFrom gt cols_align
 #' @importFrom gt tab_spanner
 #' @importFrom gt tab_source_note
 #'
@@ -127,6 +129,7 @@ my_cross <- function(.data, .x, .y, cramer = TRUE, p.value = TRUE, adjres = FALS
   .crosstab_gt <-
     .crosstab_raw |>
     gt() |>
+    cols_align(align = "left", columns = !!.x) |>
     tab_spanner(label = as_label(.y), columns = .y_levels)
 
   # 注釈の作成
